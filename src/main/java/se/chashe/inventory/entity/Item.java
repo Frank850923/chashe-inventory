@@ -6,28 +6,55 @@
 package se.chashe.inventory.entity;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.Version;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
  * @author frvi
  */
+@NamedQuery(name = Item.FIND_ALL, query = "SELECT i FROM Item i")
 @Entity
 public class Item {
-    @GeneratedValue
-    private int id;
-    private int price;
+    public static final String FIND_ALL = "Item.findAll";
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    @Version
+    private int version;
+    @NotNull
+    private float price;
+    @NotNull
+    @Column(name = "unit_cost")
+    private float unitCost;
+    @Column(length = 40, nullable = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     private String name;
     private int amount;
+    @Column(length = 3000, nullable = false)
+    @NotNull
+    @Size(max = 3000)
     private String description;
+    @Column(name = "image_path")
+    @NotEmpty
+    private String imagePath;
     private List<Integer> quantities;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
